@@ -1,6 +1,6 @@
+use log::{error, info, warn};
 use serde::{Serialize, Deserialize};
 use chrono::Utc;
-use log::{error, warn, info};
 use sha2::{Sha256, Digest};
 
 pub struct App {
@@ -29,12 +29,12 @@ fn hash_to_binary_representation(hash: &[u8]) -> String{
     res
 }
 impl App {
-    fn new() -> Self{
+    pub fn new() -> Self{
         Self {blocks: vec![]}
     }
 
     // 최초의 블록을 하드코딩으로 만드는 작업
-    fn genesis(&mut self){
+    pub fn genesis(&mut self){
         let genesis_block = Block {
             id: 0,
             timestamp: Utc::now().timestamp(),
@@ -49,7 +49,7 @@ impl App {
 
     // 블록을 추가하는 함수
     // error handling을 대충해서 실제로는 문제가 있어 쓸 수 없음
-    fn try_add_block(&mut self, block: Block){
+    pub fn try_add_block(&mut self, block: Block){
         let latest_block = self.blocks.last()
                                     .expect("there's at least one block");
 
@@ -114,7 +114,7 @@ impl App {
 
     // consensus에 따르면 어떤 chain이 나은지 확인하는 것이다.
     // 보통 difficulty 등등을 기준으로 보지만 우리는 길이로만 본다.
-    fn choose_chain(&mut self, local: Vec<Block>, remote: Vec<Block>) -> Vec<Block>{
+    pub fn choose_chain(&mut self, local: Vec<Block>, remote: Vec<Block>) -> Vec<Block>{
         let is_local_valid = self.is_chain_valid(&local);
         let is_remote_valid = self.is_chain_valid(&remote);
 
